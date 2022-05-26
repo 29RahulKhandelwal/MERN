@@ -1,8 +1,11 @@
+const dotenv=require("dotenv");
 const express=require("express");
 const mongoose=require("mongoose");
 const app=express();
 
-mongoose.connect("mongodb+srv://admin:admin@cluster0.9mv8a.mongodb.net/mern?retryWrites=true&w=majority",{
+dotenv.config({path:'./config.env'});
+
+mongoose.connect(process.env.DATABASE,{
   useNewUrlParser:true,
   useUnifiedTopology:true
 }).then(()=>{
