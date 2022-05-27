@@ -5,7 +5,10 @@ const app=express();
 
 dotenv.config({path:'./config.env'});
 
-mongoose.connect(process.env.DATABASE,{
+const DB=process.env.DATABASE
+const PORT=process.env.PORT;
+
+mongoose.connect(DB,{
   useNewUrlParser:true,
   useUnifiedTopology:true
 }).then(()=>{
@@ -33,4 +36,4 @@ app.get('/signup',(req,res)=>{
     res.send("Hello SignUp MERN");
 })
 
-app.listen(3000,()=>{console.log("Server running on port 3000")});
+app.listen(PORT,()=>{console.log(`Server running on port ${PORT}`)});
