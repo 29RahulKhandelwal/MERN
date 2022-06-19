@@ -7,7 +7,7 @@ const User=require("../model/userSchema");
 router.get('/',(req,res)=>{
     res.send("Hello MERN Router");
 })
-router.post('/signin',async (req,res)=>{
+router.post('/signup',async (req,res)=>{
     const {name,email,phone,work,password,cpassword}=req.body;
     if(!name || !email || !phone || !work || !password || !cpassword){
         return res.status(422).json({error:"Please fill all the fields"})
@@ -22,6 +22,29 @@ router.post('/signin',async (req,res)=>{
         res.status(201).json({success:"user registered successfully"})
     }
     catch(err){console.log(err)}
+})
+
+router.post("/signin",async (req,res)=>{
+    // console.log(req.body);
+    // res.json({message:"successfully logged in"})
+    try{
+        const {email,password}=req.body;
+        if(!email || !password){
+            return res.status(400).json({error:"Please fill all the credentials"})
+        }
+
+        const userLogin=await User.findOne({email:email})
+
+        if(!userLogin){
+            res.status(400).json({error:"invalid credentials"})
+        }else{
+            res.json({message:"user signin successful"})
+        }
+
+
+    } catch(err){
+        console.log(err);
+    }
 })
 
 module.exports=router;
