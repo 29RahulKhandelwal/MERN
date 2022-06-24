@@ -1,3 +1,4 @@
+const jwt=require("jsonwebtoken");
 const express=require("express");
 const bcrypt=require("bcryptjs");
 const router=express.Router();
@@ -32,6 +33,7 @@ router.post('/signup',async (req,res)=>{
 router.post("/signin",async (req,res)=>{
     // res.json({message:"successfully logged in"})
     try{
+        let token;
         const {email,password}=req.body;
         if(!email || !password){
             return res.status(400).json({error:"Please fill all the credentials"})
@@ -41,7 +43,14 @@ router.post("/signin",async (req,res)=>{
 
         if(userLogin){
             const isMatch=await bcrypt.compare(password,userLogin.password)
-    
+            
+            token=await userLogin.generateAuthToken()
+            
+            res.cookie("jwtoken",token,{
+                expires:new Date(Date.now()+2589200000),
+                httpOnly:true
+            });
+
             if(!isMatch){
                 res.status(400).json({error:"invalid credentials"})
             }else{
